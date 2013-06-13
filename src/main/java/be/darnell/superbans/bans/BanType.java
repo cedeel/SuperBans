@@ -26,35 +26,13 @@
 */
 package be.darnell.superbans.bans;
 
-import be.darnell.superbans.SuperBans;
-import be.darnell.superbans.storage.SuperBanStore;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-
 /**
- * A ban manager that handles the creation and removal of bans in SuperBans
- * @author cedeel
+ * The various types of bans to be stored
  */
-public class BanManager {
-    private SuperBans plugin;
-    private SuperBanStore store;
-
-    public BanManager(SuperBans instance) {
-        plugin = instance;
-    }
-
-    public void ban(CommandSender sender, OfflinePlayer target) {
-        plugin.debug(sender.getName() + ": Running ban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), BanType.REGULAR));
-    }
-
-    public boolean isBanned(CommandSender sender, OfflinePlayer target) {
-        return store.isBanned(target.getName());
-    }
-
-    public void unban(CommandSender sender, OfflinePlayer target) {
-        plugin.debug(sender.getName() + ": Running unban for " + target.getName() + ".");
-        if(store.isBanned(target.getName()))
-            store.unban(target.getName());
-    }
+public enum BanType {
+    REGULAR,
+    TEMPORARY,
+    IP,
+    IP_TEMPORARY,
+    PERMANENT
 }

@@ -24,37 +24,37 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package be.darnell.superbans.bans;
+package be.darnell.superbans.storage;
 
-import be.darnell.superbans.SuperBans;
-import be.darnell.superbans.storage.SuperBanStore;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
+import be.darnell.superbans.bans.Ban;
 
-/**
- * A ban manager that handles the creation and removal of bans in SuperBans
- * @author cedeel
- */
-public class BanManager {
-    private SuperBans plugin;
-    private SuperBanStore store;
+import java.util.List;
 
-    public BanManager(SuperBans instance) {
-        plugin = instance;
-    }
+public interface SuperBanStore {
 
-    public void ban(CommandSender sender, OfflinePlayer target) {
-        plugin.debug(sender.getName() + ": Running ban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), BanType.REGULAR));
-    }
+    /**
+     * Check whether a user is banned
+     * @param target The user to check
+     * @return Whether the user is currently banned
+     */
+    public boolean isBanned(String target);
 
-    public boolean isBanned(CommandSender sender, OfflinePlayer target) {
-        return store.isBanned(target.getName());
-    }
+    /**
+     * Get a list of bans on a user
+     * @param target The user to which the bans belong
+     * @return A list of bans
+     */
+    public List<Ban> getBans(String target);
 
-    public void unban(CommandSender sender, OfflinePlayer target) {
-        plugin.debug(sender.getName() + ": Running unban for " + target.getName() + ".");
-        if(store.isBanned(target.getName()))
-            store.unban(target.getName());
-    }
+    /**
+     * Add a ban to the store
+     * @param ban The ban to add
+     */
+    public void ban(Ban ban);
+
+    /**
+     * Remove a ban from the store
+     * @param target The user to unban
+     */
+    public void unban(String target);
 }
