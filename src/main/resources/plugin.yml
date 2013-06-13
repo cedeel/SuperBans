@@ -2,102 +2,75 @@ name: SuperBans
 description: Complete banning solution for Bukkit
 version: maven-version-number
 author: cedeel
-main: be.darnell.superbans.Plugin
+main: be.darnell.superbans.SuperBans
 
 commands:
+  ################
+  # BASE COMMAND #
+  ################
+  superbans:
+    description: The commands for interfacing with SuperBans
+    aliases: [sb]
+    usage: /<command> [section] [options]...
+  #################
+  # GENERAL USAGE #
+  #################
   ban:
     description: Ban a player
     usage: /<command> {player} [-s|-a] {reason}
-    permission: superbans.ban
   tempban:
     description: Temporarily ban a player
     usage: /<command> {player} [-s|-a] {amount} {sec|min|hour|day} {reason}
-    permission: superbans.tempban
   ipban:
     description: Ban a player by IP address
     usage: /<command> {player} [-s|-a] {reason}
-    permission: superbans.ipban
   tempipban:
     description: Temporarily ban a player by IP address
     usage: /<command> {player} [-s|-a] {amount} {sec/min/hour/day} {reason}
-    permission: superbans.tempipban
   permaban:
     description: A very sticky ban
     usage: /<command> {player} [-s|-a] {reason}
-    permission: superbans.permaban
   unban:
     description: Unban a player
     usage: /<command> {player}
-    permission: superbans.unban
   warn:
     description: Warn a player
     usage: /<command> {player} [-s|-a] {reason}
-    permission: superbans.warn
   kick:
     description: Kick a player
     usage: /<command> {player / *} [-s|-a] {reason}
-    permission: superbans.kick
-# Informational #
+  #################
+  # INFORMATIONAL #
+  #################
   checkban:
     description: Check if a player is banned
     usage: /<command> [player]
-    permission: superbans.checkban
   banlist:
     description: Get a list of infractions by a player
     usage: /<command> {player}
-    permission: superbans.banlist
   checkip:
     description: Check a player's IP address
     usage: /<command> {player}
-    permission: superbans.checkip
   dupeip:
     description: Check a player's IP address against all players
     usage: /<command> {player}
-    permission: superbans.dupeip
 # Management #
   sbstatus:
     description: Shows statistics about SuperBans
     usage: /<command>
-    permission: superbans.status
   sbreload:
     description: Reload the bans
     usage: /<command>
-    permission: superbans.reload
   editban:
     description: Edit a ban
     usage: /<command> {list|load|id|save|view|reason|time|cancel|help}
-    permission: superbans.editban
   exportbans:
     description: Export bans to default text files
-    usage /<command>
-    permission: superbans.export
+    usage: /<command>
   importbans:
     description: Import bans from default text files
     usage: /<command>
-    permission: superbans.import
 permissions:
-  superbans.*:
-    default: op
-    description: Allows full control over SuperBans
-    children:
-      superbans.import: true
-      superbans.export: true
-      superbans.editban: true
-      superbans.reload: true
-      superbans.status: true
-      superbans.dupeip: true
-      superbans.checkip: true
-      superbans.banlist: true
-      superbans.checkban: true
-      superbans.kick: true
-      superbans.warn: true
-      superbans.permaban: true
-      superbans.tempipban: true
-      superbans.ipban: true
-      superbans.tempban: true
-      superbans.ban: true
-  superbans.ban:
-    description: Allows banning of players
   superbans.tempban:
     description: Allows temporary banning of players
   superbans.ipban:
@@ -108,17 +81,15 @@ permissions:
     description: Allows the permanent banning of players
   superbans.kick:
     description: Allows kicking of players
-  superbans.kick.all
+  superbans.kick.all:
     description: Allows kicking of everyone besides the issuing player
     children:
       superbans.kick: true
-  superbans.unban:
-    description: Unban a player
   superbans.warn:
     description: Warn a player
   superbans.banlist:
     description: Get a list of previous infractions
-  superbans.checkban
+  superbans.checkban:
     description: Check if a player is banned
   superbans.checkip:
     description: Check a player's last known IP
@@ -157,12 +128,12 @@ permissions:
     description: Allows a player to override kickall
   superbans.override.permaban:
     description: Allows a player to override a permaban
-  superbans.override.tempban
+  superbans.override.tempban:
     description: Allows a player to override a temporary ban
-  superbans.override.tempipban
+  superbans.override.tempipban:
     description: Allows a player to override a temporary IP ban
-  superbans.override.warn
+  superbans.override.warn:
     description: Allows a player to override a warning
-  superbans.override.dupeip
+  superbans.override.dupeip:
     default: op
     description: Allows a player to override the dupe IP check on login

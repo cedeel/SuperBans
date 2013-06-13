@@ -57,7 +57,7 @@ public abstract class SuperBansCommand extends Command {
     }
 
     public void showHelp(CommandSender sender) {
-        sender.sendMessage(colour2 + "===" + colour1 + getCommandName() + colour2 + "===");
+        sender.sendMessage(colour2 + "=== " + colour1 + getCommandName() + colour2 + " ===");
         sender.sendMessage(colour2 + "Usage: " + colour1 + getCommandUsage());
         sender.sendMessage(colour2 + getCommandDesc());
         sender.sendMessage((colour2 + "Permission: " + colour1 + this.getPermissionString()));

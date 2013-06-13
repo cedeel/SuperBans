@@ -31,6 +31,8 @@ import be.darnell.superbans.bans.BanManager;
 import be.darnell.superbans.commands.*;
 import be.darnell.superbans.listeners.ChatListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -39,6 +41,9 @@ import org.mcstats.MetricsLite;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SuperBans extends JavaPlugin {
 
@@ -65,6 +70,14 @@ public class SuperBans extends JavaPlugin {
         }
     }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> allArgs = new ArrayList<String>();
+        allArgs.addAll(Arrays.asList(args));
+        allArgs.add(0, label);
+        return commandHandler.locateAndRunCommand(sender, allArgs);
+    }
+
     private void registerConfiguration() {
         configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
@@ -89,6 +102,8 @@ public class SuperBans extends JavaPlugin {
         PermissionsModule pm = new PermissionsModule();
         commandHandler = new CommandHandler(this, pm);
         // TODO: Register commands
+        // Base commands
+        commandHandler.registerCommand(new BaseCommand(this));
         // Misc. commands
         commandHandler.registerCommand(new VersionCommand(this));
         // Ban related commands
