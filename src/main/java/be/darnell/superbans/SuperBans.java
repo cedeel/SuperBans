@@ -27,24 +27,42 @@
 
 package be.darnell.superbans;
 
+import be.darnell.superbans.bans.BanManager;
+import be.darnell.superbans.commands.*;
+import be.darnell.superbans.listeners.ChatListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.MetricsLite;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SuperBans extends JavaPlugin {
 
+    private boolean debug = false;
+
+    private BanManager          banManager;
     private CommandHandler      commandHandler;
     private FileConfiguration   configuration;
     private File                configFile;
 
     @Override
     public void onEnable() {
+        registerConfiguration();
+        registerBans();
         registerEvents();
         registerCommands();
+
+        // Enable plugin metrics
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+        } catch (IOException e) {
+            log("An error occurred while posting results to the Metrics.");
+            warn(e.getLocalizedMessage());
+        }
     }
 
     private void registerConfiguration() {
@@ -56,12 +74,45 @@ public class SuperBans extends JavaPlugin {
         }
     }
 
+    private void registerBans() {
+        banManager = new BanManager(this);
+    }
+
     private void registerEvents() {
         PluginManager manager = getServer().getPluginManager();
         // TODO: Create listeners and register them here
+        ChatListener cListener = new ChatListener(this);
+        manager.registerEvents(cListener, this);
     }
 
     private void registerCommands() {
+        PermissionsModule pm = new PermissionsModule();
+        commandHandler = new CommandHandler(this, pm);
         // TODO: Register commands
+        // Misc. commands
+        commandHandler.registerCommand(new VersionCommand(this));
+        // Ban related commands
+        commandHandler.registerCommand(new BanCommand(this));
+        commandHandler.registerCommand(new UnbanCommand(this));
+    }
+
+    public BanManager getBanManager() {
+        return banManager;
+    }
+
+    // Logging related
+    public void log(String message) {
+        getLogger().info(message);
+    }
+
+    public void warn(String message) {
+        getLogger().warning(message);
+    }
+
+    public void debug(String message) {
+        if (debug) {
+            message = "[Debug] " + message;
+            getLogger().info(message);
+        }
     }
 }
