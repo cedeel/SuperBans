@@ -53,6 +53,7 @@ public class SuperBans extends JavaPlugin {
     private CommandHandler      commandHandler;
     private FileConfiguration   configuration;
     private File                configFile;
+    private String              defaultBanReason;
 
     @Override
     public void onEnable() {
@@ -60,6 +61,8 @@ public class SuperBans extends JavaPlugin {
         registerBans();
         registerEvents();
         registerCommands();
+
+        defaultBanReason = this.getConfig().getString("Messages.DefaultReason", "No reason given");
 
         // Enable plugin metrics
         try {
@@ -130,5 +133,9 @@ public class SuperBans extends JavaPlugin {
             message = "[Debug] " + message;
             getLogger().info(message);
         }
+    }
+
+    public String getDefaultReason() {
+        return defaultBanReason;
     }
 }

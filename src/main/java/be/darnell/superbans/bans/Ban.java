@@ -26,16 +26,43 @@
 */
 package be.darnell.superbans.bans;
 
+import java.util.Date;
+
 /**
  * A representation of a stored ban
  */
 public class Ban {
     private String user;
     private BanType type;
+    private String message;
+    private Date start;
+    private long duration = 0l;
     // TODO: Add the rest to the ban
 
-    public Ban(String user, BanType type) {
+    public Ban(String user, BanType type, String message, Date start, long duration) {
         this.user = user;
         this.type = type;
+        this.message = message;
+        this.duration = duration;
+    }
+
+    public Ban(String user, BanType type, String message, long duration) {
+        this(user, type, message, new Date(System.currentTimeMillis()), duration);
+    }
+
+    public Ban(String user, BanType type, String message) {
+        this(user, type, message, 0l);
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public BanType getType() {
+        return type;
+    }
+
+    public long getDuration() {
+        return duration;
     }
 }

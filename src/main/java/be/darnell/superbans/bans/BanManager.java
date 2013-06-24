@@ -31,6 +31,8 @@ import be.darnell.superbans.storage.SuperBanStore;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+
 /**
  * A ban manager that handles the creation and removal of bans in SuperBans
  * @author cedeel
@@ -41,17 +43,69 @@ public class BanManager {
 
     public BanManager(SuperBans instance) {
         plugin = instance;
+        // TODO: Add logic for selecting a ban store
     }
 
-    public void ban(CommandSender sender, OfflinePlayer target) {
+    /**
+     * Ban a user from logging on.
+     * @param sender The user issuing the ban
+     * @param target The user being banned
+     * @param reason The reason for the ban
+     */
+    public void ban(CommandSender sender, OfflinePlayer target, String reason) {
         plugin.debug(sender.getName() + ": Running ban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), BanType.REGULAR));
+        store.ban(new Ban(target.getName(), BanType.REGULAR, reason));
     }
 
+    /**
+     * Temporarily ban a user from logging on.
+     * @param sender The user issuing the ban
+     * @param target The user being banned
+     * @param duration The duration of the ban, in milliseconds
+     * @param reason The reason for the ban
+     */
+    public void tempBan(CommandSender sender, OfflinePlayer target, String reason, long duration) {
+        plugin.debug(sender.getName() + ": Running tempban for " + target.getName() + ".");
+        store.ban(new Ban(target.getName(), BanType.TEMPORARY, reason, duration));
+    }
+
+    /**
+     * Ban a user by his/her IP address, preventing any accounts from logging in from that address
+     * @param sender The user issuing the ban
+     * @param target The user being banned
+     * @param reason The reason for the ban
+     */
+    public void ipBan(CommandSender sender, OfflinePlayer target, String reason) {
+        plugin.debug(sender.getName() + ": Running IP ban for " + target.getName() + ".");
+        store.ban(new Ban(target.getName(), BanType.IP, reason));
+    }
+
+    /**
+     * Check if a user is currently banned
+     * @param sender The user checking for the ban status
+     * @param target The user whose ban status is being checked
+     * @return Whether the user is banned
+     */
     public boolean isBanned(CommandSender sender, OfflinePlayer target) {
         return store.isBanned(target.getName());
     }
 
+    /**
+     * Gets a history of infractions of the selected user
+     * @param sender The user looking up infractions
+     * @param target The user in question
+     * @return A list of infractions
+     */
+    public List<Ban> getHistory(CommandSender sender, OfflinePlayer target) {
+        plugin.debug(sender.getName() + ": Getting ban history of " + target.getName() + ".");
+        return store.getBans(target.getName());
+    }
+
+    /**
+     * Lift a ban on a user
+     * @param sender The user lifting the ban
+     * @param target The user whose ban if being lifted
+     */
     public void unban(CommandSender sender, OfflinePlayer target) {
         plugin.debug(sender.getName() + ": Running unban for " + target.getName() + ".");
         if(store.isBanned(target.getName()))

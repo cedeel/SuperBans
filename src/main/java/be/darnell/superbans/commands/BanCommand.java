@@ -38,8 +38,8 @@ public class BanCommand extends SuperBansCommand {
     public BanCommand(SuperBans plugin) {
         super(plugin);
         this.setName("SuperBans: Ban");
-        this.setCommandUsage("/ban <user>");
-        this.setArgRange(1, 1);
+        this.setCommandUsage("/ban <user> <reason>");
+        this.setArgRange(1, 2);
         this.addKey("superbans ban");
         this.addKey("sb ban");
         this.addKey("ban");
@@ -53,6 +53,8 @@ public class BanCommand extends SuperBansCommand {
             sender.sendMessage(colour2 + "The target " + colour1 + args.get(0) + colour2 + " doesn't exist.");
             return;
         }
-        plugin.getBanManager().ban(sender, target);
+        String reason = args.get(1);
+        if(reason == null) reason = plugin.getDefaultReason();
+        plugin.getBanManager().ban(sender, target, reason);
     }
 }

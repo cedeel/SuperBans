@@ -34,5 +34,7 @@ public enum BanType {
     TEMPORARY,
     IP,
     IP_TEMPORARY,
-    PERMANENT
+    PERMANENT,
+    KICK,
+    WARNING
 }
