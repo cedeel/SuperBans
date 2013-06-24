@@ -64,6 +64,7 @@ public class SuperBans extends JavaPlugin {
         // Enable plugin metrics
         try {
             MetricsLite metrics = new MetricsLite(this);
+            metrics.enable();
         } catch (IOException e) {
             log("An error occurred while posting results to the Metrics.");
             warn(e.getLocalizedMessage());
