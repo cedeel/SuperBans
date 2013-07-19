@@ -32,6 +32,7 @@ import java.util.Date;
  * A representation of a stored ban
  */
 public class Ban {
+    private int id;
     private String user;
     private BanType type;
     private String message;
@@ -39,12 +40,17 @@ public class Ban {
     private long duration = 0l;
     // TODO: Add the rest to the ban
 
-    public Ban(String user, BanType type, String message, Date start, long duration) {
+    public Ban(int id, String user, BanType type, String message, Date start, long duration) {
+        this.id = id;
         this.user = user;
         this.type = type;
         this.message = message;
         this.start = start;
         this.duration = duration;
+    }
+
+    public Ban(String user, BanType type, String message, Date start, long duration) {
+        this(0, user, type, message, start, duration);
     }
 
     public Ban(String user, BanType type, String message, long duration) {

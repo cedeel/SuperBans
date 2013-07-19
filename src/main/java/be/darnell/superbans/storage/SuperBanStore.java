@@ -49,8 +49,9 @@ public interface SuperBanStore {
     /**
      * Add a ban to the store
      * @param ban The ban to add
+     * @return The ID of the ban
      */
-    public void ban(Ban ban);
+    public int ban(Ban ban);
 
     /**
      * Remove a ban from the store
