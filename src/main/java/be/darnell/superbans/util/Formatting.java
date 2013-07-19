@@ -24,54 +24,31 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package be.darnell.superbans.bans;
+package be.darnell.superbans.util;
 
-import java.util.Date;
+public class Formatting {
 
-/**
- * A representation of a stored ban
- */
-public class Ban {
-    private String user;
-    private BanType type;
-    private String message;
-    private Date start;
-    private long duration = 0l;
-    // TODO: Add the rest to the ban
+    public static long parseTimeSpec(String time, String unit) {
+        long sec;
+        try {
+            sec = Integer.parseInt(time)*60;
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
 
-    public Ban(String user, BanType type, String message, Date start, long duration) {
-        this.user = user;
-        this.type = type;
-        this.message = message;
-        this.start = start;
-        this.duration = duration;
-    }
-
-    public Ban(String user, BanType type, String message, long duration) {
-        this(user, type, message, new Date(System.currentTimeMillis()), duration);
-    }
-
-    public Ban(String user, BanType type, String message) {
-        this(user, type, message, 0l);
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public BanType getType() {
-        return type;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public String getMessage() {
-        return message;
+        if (unit.toLowerCase().startsWith("h")){
+            sec *= 60;
+        }else if (unit.toLowerCase().startsWith("d")){
+            sec *= (60*24);
+        }else if (unit.toLowerCase().startsWith("w")){
+            sec *= (7*60*24);
+        }else if (unit.toLowerCase().startsWith("mo")){
+            sec *= (30*60*24);
+        }else if (unit.toLowerCase().startsWith("m")){
+            sec *= 1;
+        }else if (unit.toLowerCase().startsWith("s")){
+            sec /= 60;
+        }
+        return sec;
     }
 }

@@ -69,7 +69,7 @@ public class SuperBans extends JavaPlugin {
             MetricsLite metrics = new MetricsLite(this);
             metrics.enable();
         } catch (IOException e) {
-            log("An error occurred while posting results to the Metrics.");
+            getLogger().warning("An error occurred while posting results to the Metrics.");
             warn(e.getLocalizedMessage());
         }
     }
@@ -113,15 +113,11 @@ public class SuperBans extends JavaPlugin {
         // Ban related commands
         commandHandler.registerCommand(new BanCommand(this));
         commandHandler.registerCommand(new UnbanCommand(this));
+        commandHandler.registerCommand(new TempbanCommand(this));
     }
 
     public BanManager getBanManager() {
         return banManager;
-    }
-
-    // Logging related
-    public void log(String message) {
-        getLogger().info(message);
     }
 
     public void warn(String message) {

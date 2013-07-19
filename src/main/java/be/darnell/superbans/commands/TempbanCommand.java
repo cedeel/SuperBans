@@ -24,54 +24,38 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package be.darnell.superbans.bans;
+package be.darnell.superbans.commands;
 
-import java.util.Date;
+import be.darnell.superbans.SuperBans;
+import be.darnell.superbans.util.Formatting;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
-/**
- * A representation of a stored ban
- */
-public class Ban {
-    private String user;
-    private BanType type;
-    private String message;
-    private Date start;
-    private long duration = 0l;
-    // TODO: Add the rest to the ban
+import java.util.List;
 
-    public Ban(String user, BanType type, String message, Date start, long duration) {
-        this.user = user;
-        this.type = type;
-        this.message = message;
-        this.start = start;
-        this.duration = duration;
+public class TempbanCommand extends SuperBansCommand {
+
+    public TempbanCommand(SuperBans plugin) {
+        super(plugin);
+        this.setName("SuperBans: Tempban");
+        this.setCommandUsage("/tempban <user> <amount> <unit> [reason]");
+        this.setArgRange(3, 4);
+        this.addKey("superbans tempban");
+        this.addKey("sb tempban");
+        this.addKey("tempban");
+        this.setPermission("superbans.ban", "Allows this user to temporarily ban other users.", PermissionDefault.OP);
     }
-
-    public Ban(String user, BanType type, String message, long duration) {
-        this(user, type, message, new Date(System.currentTimeMillis()), duration);
-    }
-
-    public Ban(String user, BanType type, String message) {
-        this(user, type, message, 0l);
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public BanType getType() {
-        return type;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public String getMessage() {
-        return message;
+    @Override
+    public void runCommand(CommandSender sender, List<String> args) {
+        OfflinePlayer target = plugin.getServer().getOfflinePlayer(args.get(0));
+        if (target == null) {
+            sender.sendMessage(colour2 + "The target " + colour1 + args.get(0) + colour2 + " doesn't exist.");
+            return;
+        }
+        long duration = Formatting.parseTimeSpec(args.get(1), args.get(2));
+        String reason = args.get(3);
+        if(reason == null) reason = plugin.getDefaultReason();
+        plugin.getBanManager().tempBan(sender, target, reason, duration);
     }
 }
