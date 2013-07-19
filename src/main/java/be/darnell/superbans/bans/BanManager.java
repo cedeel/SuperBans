@@ -81,6 +81,18 @@ public class BanManager {
     }
 
     /**
+     * Temporarily ban a user by his/her IP address
+     * @param sender The user issuing the ban
+     * @param target The user being banned
+     * @param reason The reason for the ban
+     * @param duration The duration of the ban
+     */
+    public void tempIpBan(CommandSender sender, OfflinePlayer target, String reason, long duration) {
+        plugin.debug(sender.getName() + ": Running temp IP ban for " + target.getName() + ".");
+        store.ban(new Ban(target.getName(), BanType.IP_TEMPORARY, reason, duration));
+    }
+
+    /**
      * Check if a user is currently banned
      * @param sender The user checking for the ban status
      * @param target The user whose ban status is being checked
