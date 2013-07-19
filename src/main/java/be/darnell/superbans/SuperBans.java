@@ -114,6 +114,7 @@ public class SuperBans extends JavaPlugin {
         commandHandler.registerCommand(new BanCommand(this));
         commandHandler.registerCommand(new UnbanCommand(this));
         commandHandler.registerCommand(new TempbanCommand(this));
+        commandHandler.registerCommand(new IPBanCommand(this));
     }
 
     public BanManager getBanManager() {
