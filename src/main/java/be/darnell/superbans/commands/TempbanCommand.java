@@ -40,7 +40,7 @@ public class TempbanCommand extends SuperBansCommand {
         super(plugin);
         this.setName("SuperBans: Tempban");
         this.setCommandUsage("/tempban <user> <amount> <unit> [reason]");
-        this.setArgRange(3, 4);
+        this.setArgRange(3, 20);
         this.addKey("superbans tempban");
         this.addKey("sb tempban");
         this.addKey("tempban");
@@ -54,8 +54,11 @@ public class TempbanCommand extends SuperBansCommand {
             return;
         }
         long duration = Formatting.parseTimeSpec(args.get(1), args.get(2));
-        String reason = args.get(3);
-        if(reason == null) reason = plugin.getDefaultReason();
+
+        String reason = plugin.getDefaultReason();;
+        if (args.size() > 3)
+            reason = Formatting.combineStrings(args, 3, args.size());
+
         plugin.getBanManager().tempBan(sender, target, reason, duration);
     }
 }
