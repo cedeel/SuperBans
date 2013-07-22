@@ -26,6 +26,8 @@
 */
 package be.darnell.superbans.util;
 
+import java.util.List;
+
 public class Formatting {
 
     public static long parseTimeSpec(String time, String unit) {
@@ -50,5 +52,12 @@ public class Formatting {
             sec /= 60;
         }
         return sec;
+    }
+
+    public static String combineStrings(List<String> list, int first, int last) {
+        StringBuilder sb = new StringBuilder(19);
+        for (int i = first; i<last; i++)
+            sb.append(list.get(i)).append(" ");
+        return sb.toString().trim();
     }
 }

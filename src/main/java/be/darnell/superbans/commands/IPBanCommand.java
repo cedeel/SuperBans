@@ -27,6 +27,7 @@
 package be.darnell.superbans.commands;
 
 import be.darnell.superbans.SuperBans;
+import be.darnell.superbans.util.Formatting;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
@@ -39,7 +40,7 @@ public class IPBanCommand extends  SuperBansCommand {
         super(plugin);
         this.setName("SuperBans: IP Ban");
         this.setCommandUsage("/ipban <user> <reason>");
-        this.setArgRange(1, 2);
+        this.setArgRange(1, 20);
         this.addKey("superbans ipban");
         this.addKey("sb ipban");
         this.addKey("ipban");
@@ -53,8 +54,11 @@ public class IPBanCommand extends  SuperBansCommand {
             sender.sendMessage(colour2 + "The target " + colour1 + args.get(0) + colour2 + " doesn't exist.");
             return;
         }
-        String reason = args.get(1);
-        if(reason == null) reason = plugin.getDefaultReason();
+
+        String reason = plugin.getDefaultReason();;
+        if (args.size() > 1)
+            reason = Formatting.combineStrings(args, 1, args.size());
+
         plugin.getBanManager().ipBan(sender, target, reason);
     }
 }

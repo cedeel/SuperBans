@@ -27,6 +27,7 @@
 package be.darnell.superbans.commands;
 
 import be.darnell.superbans.SuperBans;
+import be.darnell.superbans.util.Formatting;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
@@ -54,15 +55,9 @@ public class BanCommand extends SuperBansCommand {
             return;
         }
 
-        String reason;
-        if (args.size() > 1) {
-            StringBuilder sb = new StringBuilder(19);
-            for (int i = 1; i<args.size(); i++)
-                sb.append(args.get(i)).append(" ");
-            reason = sb.toString().trim();
-        }
-        else
-            reason = plugin.getDefaultReason();
+        String reason = plugin.getDefaultReason();;
+        if (args.size() > 1)
+            reason = Formatting.combineStrings(args, 1, args.size());
 
         plugin.getBanManager().ban(sender, target, reason);
     }

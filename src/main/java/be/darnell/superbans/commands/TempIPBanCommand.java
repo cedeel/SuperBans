@@ -30,6 +30,7 @@ import be.darnell.superbans.SuperBans;
 import be.darnell.superbans.util.Formatting;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
 
@@ -37,6 +38,13 @@ public class TempIPBanCommand extends SuperBansCommand {
 
     public TempIPBanCommand(SuperBans plugin) {
         super(plugin);
+        this.setName("SuperBans: Temp IP Ban");
+        this.setCommandUsage("/tempipban <user> <amount> <unit> [reason]");
+        this.setArgRange(3, 20);
+        this.addKey("superbans tempipban");
+        this.addKey("sb tempipban");
+        this.addKey("tempipban");
+        this.setPermission("superbans.tempipban", "Allows this user to temporarily ban other users by their IP address.", PermissionDefault.OP);
     }
 
     @Override
@@ -47,8 +55,11 @@ public class TempIPBanCommand extends SuperBansCommand {
             return;
         }
         long duration = Formatting.parseTimeSpec(args.get(1), args.get(2));
-        String reason = args.get(3);
-        if(reason == null) reason = plugin.getDefaultReason();
+
+        String reason = plugin.getDefaultReason();;
+        if (args.size() > 3)
+            reason = Formatting.combineStrings(args, 3, args.size());
+
         plugin.getBanManager().tempIpBan(sender, target, reason, duration);
     }
 }
