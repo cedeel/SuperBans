@@ -39,7 +39,7 @@ public class BanCommand extends SuperBansCommand {
         super(plugin);
         this.setName("SuperBans: Ban");
         this.setCommandUsage("/ban <user> <reason>");
-        this.setArgRange(1, 2);
+        this.setArgRange(1, 20);
         this.addKey("superbans ban");
         this.addKey("sb ban");
         this.addKey("ban");
@@ -55,8 +55,12 @@ public class BanCommand extends SuperBansCommand {
         }
 
         String reason;
-        if (args.size() > 1)
-            reason = args.get(1);
+        if (args.size() > 1) {
+            StringBuilder sb = new StringBuilder(19);
+            for (int i = 1; i<=args.size(); i++)
+                sb.append(args.get(i)).append(" ");
+            reason = sb.toString().trim();
+        }
         else
             reason = plugin.getDefaultReason();
 
