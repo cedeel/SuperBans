@@ -76,7 +76,7 @@ public class FlatFileStore implements SuperBanStore {
             for (String i : section.getKeys(false)) {
                 int id = Integer.parseInt(i);
                 String message = section.getString("message");
-                BanType type = (BanType)section.get("type");
+                BanType type = BanType.valueOf(section.getString("type"));
                 Date start = new Date(section.getLong("start"));
                 Long duration = section.getLong("duration");
                 bans.put(key, new Ban(id, key, type, message, start, duration));
@@ -89,7 +89,7 @@ public class FlatFileStore implements SuperBanStore {
         for (Ban ban : bans.values()) {
             String prefix = ban.getUser() + "." + ban.getId();
             banlist.set(prefix + ".message", ban.getMessage());
-            banlist.set(prefix + ".type", ban.getType());
+            banlist.set(prefix + ".type", ban.getType().name());
             banlist.set(prefix + ".start", ban.getStart().getTime());
             banlist.set(prefix + ".duration", ban.getDuration());
         }
