@@ -52,7 +52,7 @@ public class BanManager {
                 // Select MySQL storage
             default:
                 // Select flat file storage
-                store = new FlatFileStore(new File(plugin.getDataFolder() + "bans.yml"));
+                store = new FlatFileStore(new File(plugin.getDataFolder(), "bans.yml"));
         }
         // TODO: Add logic for selecting a ban store
     }
