@@ -90,8 +90,8 @@ public class FlatFileStore implements SuperBanStore {
             String prefix = ban.getUser() + "." + ban.getId();
             banlist.set(prefix + ".message", ban.getMessage());
             banlist.set(prefix + ".type", ban.getType());
-            banlist.set(prefix + ".start.", ban.getStart().getTime());
-            banlist.set(prefix + ".duration.", ban.getDuration());
+            banlist.set(prefix + ".start", ban.getStart().getTime());
+            banlist.set(prefix + ".duration", ban.getDuration());
         }
         try {
             banlist.save(file);

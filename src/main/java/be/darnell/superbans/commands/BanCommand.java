@@ -53,8 +53,13 @@ public class BanCommand extends SuperBansCommand {
             sender.sendMessage(colour2 + "The target " + colour1 + args.get(0) + colour2 + " doesn't exist.");
             return;
         }
-        String reason = args.get(1);
-        if(reason == null) reason = plugin.getDefaultReason();
+
+        String reason;
+        if (args.size() > 1)
+            reason = args.get(1);
+        else
+            reason = plugin.getDefaultReason();
+
         plugin.getBanManager().ban(sender, target, reason);
     }
 }

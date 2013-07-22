@@ -44,7 +44,7 @@ public class TempbanCommand extends SuperBansCommand {
         this.addKey("superbans tempban");
         this.addKey("sb tempban");
         this.addKey("tempban");
-        this.setPermission("superbans.ban", "Allows this user to temporarily ban other users.", PermissionDefault.OP);
+        this.setPermission("superbans.tempban", "Allows this user to temporarily ban other users.", PermissionDefault.OP);
     }
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
