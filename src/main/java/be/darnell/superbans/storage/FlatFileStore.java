@@ -38,6 +38,7 @@ import java.util.*;
 public class FlatFileStore implements SuperBanStore {
 
     private Map<String, Ban> bans;
+    private int nextId;
     private File file;
 
     public FlatFileStore(File storage) {
@@ -57,15 +58,27 @@ public class FlatFileStore implements SuperBanStore {
 
     @Override
     public int ban(Ban ban) {
-        bans.put(ban.getUser(), ban);
+        Ban toStore = applyId(ban);
+        bans.put(toStore.getUser(), toStore);
         toDisk();
-        return ban.getId();
+        return toStore.getId();
     }
 
     @Override
     public void unban(String target) {
         bans.remove(target);
         toDisk();
+    }
+
+    private Ban applyId(Ban ban) {
+        return new Ban(
+                nextId++,
+                ban.getUser(),
+                ban.getType(),
+                ban.getMessage(),
+                ban.getStart(),
+                ban.getDuration()
+        );
     }
 
     private void fromDisk() {

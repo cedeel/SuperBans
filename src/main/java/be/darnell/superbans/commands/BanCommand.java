@@ -57,7 +57,7 @@ public class BanCommand extends SuperBansCommand {
         String reason;
         if (args.size() > 1) {
             StringBuilder sb = new StringBuilder(19);
-            for (int i = 1; i<=args.size(); i++)
+            for (int i = 1; i<args.size(); i++)
                 sb.append(args.get(i)).append(" ");
             reason = sb.toString().trim();
         }
