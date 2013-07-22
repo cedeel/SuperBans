@@ -40,9 +40,9 @@ import java.util.List;
  */
 public abstract class SuperBansCommand extends Command {
 
-    protected SuperBans plugin;
-    protected ChatColor colour1 = ChatColor.GOLD;
-    protected ChatColor colour2 = ChatColor.GRAY;
+    protected final SuperBans plugin;
+    protected final ChatColor colour1 = ChatColor.GOLD;
+    protected final ChatColor colour2 = ChatColor.GRAY;
 
     public SuperBansCommand(SuperBans instance) {
         super(instance);

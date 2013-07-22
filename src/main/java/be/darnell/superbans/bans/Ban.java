@@ -80,4 +80,8 @@ public class Ban {
     public String getMessage() {
         return message;
     }
+
+    public int getId() {
+        return id;
+    }
 }

@@ -33,7 +33,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private SuperBans plugin;
+    private final SuperBans plugin;
 
     public ChatListener(SuperBans instance) {
         plugin = instance;

@@ -27,10 +27,12 @@
 package be.darnell.superbans.bans;
 
 import be.darnell.superbans.SuperBans;
+import be.darnell.superbans.storage.FlatFileStore;
 import be.darnell.superbans.storage.SuperBanStore;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -43,6 +45,15 @@ public class BanManager {
 
     public BanManager(SuperBans instance) {
         plugin = instance;
+
+        // Select ban storage
+        switch (plugin.getConfig().getString("Storage", "Flat").toLowerCase()) {
+            case "mysql":
+                // Select MySQL storage
+            default:
+                // Select flat file storage
+                store = new FlatFileStore(new File(plugin.getDataFolder() + "bans.yml"));
+        }
         // TODO: Add logic for selecting a ban store
     }
 
