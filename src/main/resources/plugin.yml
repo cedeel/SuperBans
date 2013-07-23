@@ -1,6 +1,6 @@
-name: SuperBans
+name: ${name}
 description: Complete banning solution for Bukkit
-version: maven-version-number
+version: ${version}
 author: cedeel
 main: be.darnell.superbans.SuperBans
 
