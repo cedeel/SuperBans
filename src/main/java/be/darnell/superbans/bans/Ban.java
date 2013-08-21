@@ -34,53 +34,83 @@ import java.util.Date;
 public class Ban {
     private int id;
     private String user;
+    private String issuer;
     private BanType type;
     private String message;
     private Date start;
     private long duration = 0l;
     // TODO: Add the rest to the ban
 
-    public Ban(int id, String user, BanType type, String message, Date start, long duration) {
+    public Ban(int id, String user, String issuer, BanType type, String message, Date start, long duration) {
         this.id = id;
         this.user = user;
+        this.issuer = issuer;
         this.type = type;
         this.message = message;
         this.start = start;
         this.duration = duration;
     }
 
-    public Ban(String user, BanType type, String message, Date start, long duration) {
-        this(0, user, type, message, start, duration);
+    public Ban(String user, String issuer, BanType type, String message, Date start, long duration) {
+        this(0, user, issuer, type, message, start, duration);
     }
 
-    public Ban(String user, BanType type, String message, long duration) {
-        this(user, type, message, new Date(System.currentTimeMillis()), duration);
+    public Ban(String user, String issuer, BanType type, String message, long duration) {
+        this(user, issuer, type, message, new Date(System.currentTimeMillis()), duration);
     }
 
-    public Ban(String user, BanType type, String message) {
-        this(user, type, message, 0l);
+    public Ban(String user, String issuer, BanType type, String message) {
+        this(user, issuer, type, message, 0l);
     }
 
+    /**
+     * Return the user in the ban
+     * @return The user in the ban
+     */
     public String getUser() {
         return user;
     }
 
+    public String getIssuer() {
+        return issuer;
+    }
+
+    /**
+     * Get the type of the ban
+     * @return The type of the ban
+     */
     public BanType getType() {
         return type;
     }
 
+    /**
+     * Get the duration of the ban
+     * @return The duration of the ban
+     */
     public long getDuration() {
         return duration;
     }
 
+    /**
+     * Get the start of the ban
+     * @return The start date of the ban
+     */
     public Date getStart() {
         return start;
     }
 
+    /**
+     * Get the ban message
+     * @return The ban message
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Get the ID of the ban
+     * @return The ID of the ban
+     */
     public int getId() {
         return id;
     }

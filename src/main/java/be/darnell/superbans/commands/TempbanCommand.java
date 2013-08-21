@@ -55,7 +55,7 @@ public class TempbanCommand extends SuperBansCommand {
         }
         long duration = Formatting.parseTimeSpec(args.get(1), args.get(2));
 
-        String reason = plugin.getDefaultReason();;
+        String reason = plugin.getDefaultReason();
         if (args.size() > 3)
             reason = Formatting.combineStrings(args, 3, args.size());
 

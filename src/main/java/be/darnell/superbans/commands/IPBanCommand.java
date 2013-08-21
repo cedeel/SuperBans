@@ -55,7 +55,7 @@ public class IPBanCommand extends  SuperBansCommand {
             return;
         }
 
-        String reason = plugin.getDefaultReason();;
+        String reason = plugin.getDefaultReason();
         if (args.size() > 1)
             reason = Formatting.combineStrings(args, 1, args.size());
 

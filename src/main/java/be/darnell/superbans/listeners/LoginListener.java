@@ -49,6 +49,7 @@ public class LoginListener implements Listener {
             return;
         Ban ban = banManager.getBan(Bukkit.getConsoleSender(), event.getPlayer());
 
+        // TODO: Make message dynamic.
         event.disallow(PlayerLoginEvent.Result.KICK_BANNED, ChatColor.RED + "Banned: " + ban.getMessage());
     }
 }
