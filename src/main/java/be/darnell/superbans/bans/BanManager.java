@@ -125,6 +125,20 @@ public class BanManager {
     }
 
     /**
+     * Gets the latest active ban on a user
+     * @param sender The user looking up the ban
+     * @param target The user in question
+     * @return The latest active ban or NULL if the user is not currently banned.
+     */
+    public Ban getBan(CommandSender sender, OfflinePlayer target) {
+        if(store.isBanned(target.getName())) {
+            List<Ban> bans = store.getBans(target.getName());
+            return bans.get(bans.size() -1);
+        }
+        return null;
+    }
+
+    /**
      * Lift a ban on a user
      * @param sender The user lifting the ban
      * @param target The user whose ban if being lifted

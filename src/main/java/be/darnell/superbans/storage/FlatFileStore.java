@@ -37,7 +37,7 @@ import java.util.*;
 
 public class FlatFileStore implements SuperBanStore {
 
-    private Map<String, Ban> bans;
+    private Map<String, List<Ban>> bans;
     private int nextId;
     private File file;
 
@@ -48,18 +48,30 @@ public class FlatFileStore implements SuperBanStore {
 
     @Override
     public boolean isBanned(String target) {
-        return bans.containsKey(target);
+        List<Ban> result = bans.get(target);
+        if (result != null) {
+            Ban ban = result.get(result.size() -1);
+            if (!ban.isExpired())
+                return true;
+        }
+        return false;
     }
 
     @Override
     public List<Ban> getBans(String target) {
-        return new ArrayList<>(bans.values());
+        return bans.get(target);
     }
 
     @Override
     public int ban(Ban ban) {
         Ban toStore = applyId(ban);
-        bans.put(toStore.getUser(), toStore);
+        List<Ban> oldBans = new ArrayList<>();
+        try {
+            oldBans.addAll(getBans(ban.getUser()));
+        } catch (NullPointerException ignored) {
+        }
+        oldBans.add(toStore);
+        bans.put(toStore.getUser(), oldBans);
         toDisk();
         return toStore.getId();
     }
@@ -85,21 +97,32 @@ public class FlatFileStore implements SuperBanStore {
         bans = new HashMap<>();
         YamlConfiguration banlist = YamlConfiguration.loadConfiguration(file);
         for (String key : banlist.getKeys(false)) {
-            ConfigurationSection section = banlist.createSection(key);
+            ConfigurationSection section = banlist.getConfigurationSection(key);
+            List<Ban> userBans = new ArrayList<>();
             for (String i : section.getKeys(false)) {
                 int id = Integer.parseInt(i);
-                String message = section.getString("message");
-                BanType type = BanType.valueOf(section.getString("type"));
-                Date start = new Date(section.getLong("start"));
-                Long duration = section.getLong("duration");
-                bans.put(key, new Ban(id, key, type, message, start, duration));
+                if (id >= nextId)
+                    nextId = id + 1;
+                ConfigurationSection s = section.getConfigurationSection(i);
+                String message = s.getString("message");
+                BanType type = BanType.valueOf(s.getString("type"));
+                Date start = new Date(s.getLong("start"));
+                Long duration = s.getLong("duration");
+                userBans.add(new Ban(id, key, type, message, start, duration));
             }
+            bans.put(key, userBans);
         }
     }
 
     private void toDisk() {
         YamlConfiguration banlist = new YamlConfiguration();
-        for (Ban ban : bans.values()) {
+        // Make one list of bans
+        List<Ban> bansList = new ArrayList<>();
+        for (List<Ban> l : bans.values()) {
+            bansList.addAll(l);
+        }
+
+        for (Ban ban : bansList) {
             String prefix = ban.getUser() + "." + ban.getId();
             banlist.set(prefix + ".message", ban.getMessage());
             banlist.set(prefix + ".type", ban.getType().name());

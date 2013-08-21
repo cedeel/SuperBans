@@ -30,6 +30,7 @@ package be.darnell.superbans;
 import be.darnell.superbans.bans.BanManager;
 import be.darnell.superbans.commands.*;
 import be.darnell.superbans.listeners.ChatListener;
+import be.darnell.superbans.listeners.LoginListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -76,7 +77,7 @@ public class SuperBans extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        List<String> allArgs = new ArrayList<String>();
+        List<String> allArgs = new ArrayList<>();
         allArgs.addAll(Arrays.asList(args));
         allArgs.add(0, label);
         return commandHandler.locateAndRunCommand(sender, allArgs);
@@ -98,8 +99,8 @@ public class SuperBans extends JavaPlugin {
     private void registerEvents() {
         PluginManager manager = getServer().getPluginManager();
         // TODO: Create listeners and register them here
-        ChatListener cListener = new ChatListener(this);
-        manager.registerEvents(cListener, this);
+        manager.registerEvents(new ChatListener(this), this);
+        manager.registerEvents(new LoginListener(banManager), this);
     }
 
     private void registerCommands() {

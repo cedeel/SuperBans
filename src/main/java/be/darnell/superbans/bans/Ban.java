@@ -84,4 +84,10 @@ public class Ban {
     public int getId() {
         return id;
     }
+
+    public boolean isExpired() {
+        if (type == BanType.IP_TEMPORARY || type == BanType.TEMPORARY)
+            return start.getTime() + duration < System.currentTimeMillis();
+        return false;
+    }
 }
