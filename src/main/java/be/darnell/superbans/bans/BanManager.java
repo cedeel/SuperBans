@@ -31,9 +31,11 @@ import be.darnell.superbans.storage.FlatFileStore;
 import be.darnell.superbans.storage.SuperBanStore;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A ban manager that handles the creation and removal of bans in SuperBans
@@ -55,6 +57,10 @@ public class BanManager {
                 store = new FlatFileStore(new File(plugin.getDataFolder(), "bans.yml"));
         }
         // TODO: Add logic for selecting a ban store
+    }
+
+    public void kick(CommandSender sender, Player target, String reason) {
+
     }
 
     /**
@@ -110,7 +116,7 @@ public class BanManager {
      * @return Whether the user is banned
      */
     public boolean isBanned(CommandSender sender, OfflinePlayer target) {
-        return store.isBanned(target.getName());
+        return store.isBanned(target.getUniqueId());
     }
 
     /**
@@ -121,7 +127,7 @@ public class BanManager {
      */
     public List<Ban> getHistory(CommandSender sender, OfflinePlayer target) {
         plugin.debug(sender.getName() + ": Getting ban history of " + target.getName() + ".");
-        return store.getBans(target.getName());
+        return store.getBans(target.getUniqueId());
     }
 
     /**
@@ -131,8 +137,8 @@ public class BanManager {
      * @return The latest active ban or NULL if the user is not currently banned.
      */
     public Ban getBan(CommandSender sender, OfflinePlayer target) {
-        if(store.isBanned(target.getName())) {
-            List<Ban> bans = store.getBans(target.getName());
+        if(store.isBanned(target.getUniqueId())) {
+            List<Ban> bans = store.getBans(target.getUniqueId());
             return bans.get(bans.size() -1);
         }
         return null;
@@ -145,7 +151,7 @@ public class BanManager {
      */
     public void unban(CommandSender sender, OfflinePlayer target) {
         plugin.debug(sender.getName() + ": Running unban for " + target.getName() + ".");
-        if(store.isBanned(target.getName()))
-            store.unban(target.getName());
+        if(store.isBanned(target.getUniqueId()))
+            store.unban(target.getUniqueId());
     }
 }

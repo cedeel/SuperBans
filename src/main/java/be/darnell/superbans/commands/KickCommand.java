@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2013 cedeel.
+* Copyright (c) 2014 cedeel.
 * All rights reserved.
 *
 *
@@ -24,65 +24,30 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package be.darnell.superbans.storage;
 
-import be.darnell.superbans.bans.Ban;
+package be.darnell.superbans.commands;
+
+import be.darnell.superbans.SuperBans;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface SuperBanStore {
+public class KickCommand extends SuperBansCommand {
 
-    /**
-     * Check whether a user is banned
-     * @param target The user to check
-     * @return Whether the user is currently banned
-     */
-    @Deprecated
-    public boolean isBanned(String target);
+    public KickCommand(SuperBans plugin) {
+        super(plugin);
+        this.setName("SuperBans: Kick");
+        this.setCommandUsage("/kick <user> <reason>");
+        this.setArgRange(1, 20);
+        this.addKey("superbans kick");
+        this.addKey("sb kick");
+        this.addKey("kick");
+        this.setPermission("superbans.kick", "Allows this user to kick other users.", PermissionDefault.OP);
+    }
 
-    /**
-     * Check whether a user is banned
-     * @param uuid The UUID of the user to check
-     * @return Whether the user is currently banned
-     */
-    public boolean isBanned(UUID uuid);
+    @Override
+    public void runCommand(CommandSender sender, List<String> args) {
 
-    /**
-     * Get a list of bans on a user
-     * @param target The user to which the bans belong
-     * @return A list of bans
-     */
-    public List<Ban> getBans(String target);
-
-    /**
-     * Get a list of bans on a user
-     * @param target The user to which the bans belong
-     * @return A list of bans
-     */
-    public List<Ban> getBans(UUID target);
-
-    /**
-     * Add a ban to the store
-     * @param ban The ban to add
-     * @return The ID of the ban
-     */
-    public int ban(Ban ban);
-
-    /**
-     * Remove a ban from the store
-     * @param target The user to unban
-     */
-    public void unban(String target);
-
-    /**
-     * Remove a ban from the store
-     * @param target The user to unban
-     */
-    public void unban(UUID target);
-
-    /**
-     * Forcibly store the bans in memory
-     */
-    public void store();
+    }
 }

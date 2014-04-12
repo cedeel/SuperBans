@@ -37,7 +37,7 @@ import java.util.*;
 
 public class FlatFileStore implements SuperBanStore {
 
-    private Map<String, List<Ban>> bans;
+    private Map<UUID, List<Ban>> bans;
     private int nextId;
     private File file;
 
@@ -53,9 +53,14 @@ public class FlatFileStore implements SuperBanStore {
         fromDisk();
     }
 
-    @Override
+    @Deprecated
     public boolean isBanned(String target) {
-        List<Ban> result = bans.get(target);
+        return !getBans(target).isEmpty();
+    }
+
+    @Override
+    public boolean isBanned(UUID uuid) {
+        List<Ban> result = bans.get(uuid);
         if (result != null) {
             Ban ban = result.get(result.size() - 1);
             if (!ban.isExpired())
@@ -66,6 +71,20 @@ public class FlatFileStore implements SuperBanStore {
 
     @Override
     public List<Ban> getBans(String target) {
+        //return bans.get(target);
+        List<Ban> result = new ArrayList<>();
+        String checkFor = target.toLowerCase();
+        for (UUID id : bans.keySet()) {
+            for (Ban ban : bans.get(id)) {
+                if (ban.getUserName().equals(checkFor))
+                    result.add(ban);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Ban> getBans(UUID target) {
         return bans.get(target);
     }
 
@@ -78,15 +97,24 @@ public class FlatFileStore implements SuperBanStore {
         } catch (NullPointerException ignored) {
         }
         oldBans.add(toStore);
-        bans.put(toStore.getUserName(), oldBans);
+        bans.put(toStore.getUserID(), oldBans);
         toDisk();
         return toStore.getId();
     }
 
     @Override
     public void unban(String target) {
-        bans.remove(target);
-        toDisk();
+        List<Ban> userBans = getBans(target);
+        if (!userBans.isEmpty()) {
+            bans.remove(userBans.get(0).getUserID());
+            toDisk();
+        }
+    }
+
+    @Override
+    public void unban(UUID target) {
+        if (bans.remove(target) != null)
+            toDisk();
     }
 
     private Ban applyId(Ban ban) {
@@ -122,7 +150,7 @@ public class FlatFileStore implements SuperBanStore {
                 Long duration = s.getLong(DURATION_FIELD);
                 userBans.add(new Ban(id, name, uuid, issuer, type, message, start, duration));
             }
-            bans.put(key, userBans);
+            bans.put(uuid, userBans);
         }
     }
 
