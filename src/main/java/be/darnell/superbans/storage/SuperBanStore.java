@@ -58,4 +58,9 @@ public interface SuperBanStore {
      * @param target The user to unban
      */
     public void unban(String target);
+
+    /**
+     * Forcibly store the bans in memory
+     */
+    public void store();
 }

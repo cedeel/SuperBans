@@ -27,13 +27,15 @@
 package be.darnell.superbans.bans;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * A representation of a stored ban
  */
 public class Ban {
     private int id;
-    private String user;
+    private String userDisplay;
+    private UUID userID;
     private String issuer;
     private BanType type;
     private String message;
@@ -41,9 +43,10 @@ public class Ban {
     private long duration = 0l;
     // TODO: Add the rest to the ban
 
-    public Ban(int id, String user, String issuer, BanType type, String message, Date start, long duration) {
+    public Ban(int id, String user, UUID uuid, String issuer, BanType type, String message, Date start, long duration) {
         this.id = id;
-        this.user = user;
+        this.userDisplay = user;
+        this.userID = uuid;
         this.issuer = issuer;
         this.type = type;
         this.message = message;
@@ -51,24 +54,32 @@ public class Ban {
         this.duration = duration;
     }
 
-    public Ban(String user, String issuer, BanType type, String message, Date start, long duration) {
-        this(0, user, issuer, type, message, start, duration);
+    public Ban(String user, UUID uuid, String issuer, BanType type, String message, Date start, long duration) {
+        this(0, user, uuid, issuer, type, message, start, duration);
     }
 
-    public Ban(String user, String issuer, BanType type, String message, long duration) {
-        this(user, issuer, type, message, new Date(System.currentTimeMillis()), duration);
+    public Ban(String user, UUID uuid, String issuer, BanType type, String message, long duration) {
+        this(user, uuid, issuer, type, message, new Date(System.currentTimeMillis()), duration);
     }
 
-    public Ban(String user, String issuer, BanType type, String message) {
-        this(user, issuer, type, message, 0l);
+    public Ban(String user, UUID uuid, String issuer, BanType type, String message) {
+        this(user, uuid, issuer, type, message, 0l);
     }
 
     /**
      * Return the user in the ban
      * @return The user in the ban
      */
-    public String getUser() {
-        return user;
+    public String getUserName() {
+        return userDisplay;
+    }
+
+    /**
+     * Get the UUID of the banned user
+     * @return The UUID of the banned user
+     */
+    public UUID getUserID() {
+        return userID;
     }
 
     public String getIssuer() {

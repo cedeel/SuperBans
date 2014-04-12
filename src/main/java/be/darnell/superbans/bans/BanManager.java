@@ -49,7 +49,7 @@ public class BanManager {
         // Select ban storage
         switch (plugin.getConfig().getString("Storage", "Flat").toLowerCase()) {
             case "mysql":
-                // Select MySQL storage
+                // TODO: Select MySQL storage
             default:
                 // Select flat file storage
                 store = new FlatFileStore(new File(plugin.getDataFolder(), "bans.yml"));
@@ -65,7 +65,7 @@ public class BanManager {
      */
     public void ban(CommandSender sender, OfflinePlayer target, String reason) {
         plugin.debug(sender.getName() + ": Running ban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), sender.getName(), BanType.REGULAR, reason));
+        store.ban(new Ban(target.getName(), target.getUniqueId(), sender.getName(), BanType.REGULAR, reason));
     }
 
     /**
@@ -77,7 +77,7 @@ public class BanManager {
      */
     public void tempBan(CommandSender sender, OfflinePlayer target, String reason, long duration) {
         plugin.debug(sender.getName() + ": Running tempban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), sender.getName(), BanType.TEMPORARY, reason, duration));
+        store.ban(new Ban(target.getName(), target.getUniqueId(), sender.getName(), BanType.TEMPORARY, reason, duration));
     }
 
     /**
@@ -88,7 +88,7 @@ public class BanManager {
      */
     public void ipBan(CommandSender sender, OfflinePlayer target, String reason) {
         plugin.debug(sender.getName() + ": Running IP ban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), sender.getName(), BanType.IP, reason));
+        store.ban(new Ban(target.getName(), target.getUniqueId(), sender.getName(), BanType.IP, reason));
     }
 
     /**
@@ -100,7 +100,7 @@ public class BanManager {
      */
     public void tempIpBan(CommandSender sender, OfflinePlayer target, String reason, long duration) {
         plugin.debug(sender.getName() + ": Running temp IP ban for " + target.getName() + ".");
-        store.ban(new Ban(target.getName(), sender.getName(), BanType.IP_TEMPORARY, reason, duration));
+        store.ban(new Ban(target.getName(), target.getUniqueId(), sender.getName(), BanType.IP_TEMPORARY, reason, duration));
     }
 
     /**

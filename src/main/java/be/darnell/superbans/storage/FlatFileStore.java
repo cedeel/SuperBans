@@ -42,6 +42,7 @@ public class FlatFileStore implements SuperBanStore {
     private File file;
 
     private static final String ISSUER_FIELD = "issuer";
+    private static final String KNOWN_NAME_FIELD = "aka";
     private static final String MESSAGE_FIELD = "message";
     private static final String TYPE_FIELD = "type";
     private static final String START_FIELD = "start";
@@ -73,11 +74,11 @@ public class FlatFileStore implements SuperBanStore {
         Ban toStore = applyId(ban);
         List<Ban> oldBans = new ArrayList<>();
         try {
-            oldBans.addAll(getBans(ban.getUser()));
+            oldBans.addAll(getBans(ban.getUserName()));
         } catch (NullPointerException ignored) {
         }
         oldBans.add(toStore);
-        bans.put(toStore.getUser(), oldBans);
+        bans.put(toStore.getUserName(), oldBans);
         toDisk();
         return toStore.getId();
     }
@@ -91,7 +92,8 @@ public class FlatFileStore implements SuperBanStore {
     private Ban applyId(Ban ban) {
         return new Ban(
                 nextId++,
-                ban.getUser(),
+                ban.getUserName(),
+                ban.getUserID(),
                 ban.getIssuer(),
                 ban.getType(),
                 ban.getMessage(),
@@ -104,6 +106,7 @@ public class FlatFileStore implements SuperBanStore {
         bans = new HashMap<>();
         YamlConfiguration banlist = YamlConfiguration.loadConfiguration(file);
         for (String key : banlist.getKeys(false)) {
+            UUID uuid = UUID.fromString(key);
             ConfigurationSection section = banlist.getConfigurationSection(key);
             List<Ban> userBans = new ArrayList<>();
             for (String i : section.getKeys(false)) {
@@ -111,12 +114,13 @@ public class FlatFileStore implements SuperBanStore {
                 if (id >= nextId)
                     nextId = id + 1;
                 ConfigurationSection s = section.getConfigurationSection(i);
+                String name = s.getString(KNOWN_NAME_FIELD);
                 String issuer = s.getString(ISSUER_FIELD);
                 String message = s.getString(MESSAGE_FIELD);
                 BanType type = BanType.valueOf(s.getString(TYPE_FIELD));
                 Date start = new Date(s.getLong(START_FIELD));
                 Long duration = s.getLong(DURATION_FIELD);
-                userBans.add(new Ban(id, key, issuer, type, message, start, duration));
+                userBans.add(new Ban(id, name, uuid, issuer, type, message, start, duration));
             }
             bans.put(key, userBans);
         }
@@ -132,9 +136,10 @@ public class FlatFileStore implements SuperBanStore {
         }
 
         for (Ban ban : bansList) {
-            ConfigurationSection cs = banlist.createSection(ban.getUser() + "." + ban.getId());
+            ConfigurationSection cs = banlist.createSection(ban.getUserID().toString()     + "." + ban.getId());
 
             cs.set(ISSUER_FIELD, ban.getIssuer());
+            cs.set(KNOWN_NAME_FIELD, ban.getUserName());
             cs.set(MESSAGE_FIELD, ban.getMessage());
             cs.set(TYPE_FIELD, ban.getType().name());
             cs.set(START_FIELD, ban.getStart().getTime());
@@ -147,4 +152,9 @@ public class FlatFileStore implements SuperBanStore {
             System.out.println(e.getMessage());
         }
     }
+
+    public void store() {
+        toDisk();
+    }
+
 }
